@@ -1,17 +1,16 @@
-PongGame game;   //Set game as object of PongGame 
+PongGame game;
 void setup() {
   size(700, 700);
-  game = new PongGame();   //Instance 
+  game = new PongGame();
 }
-
 void draw() {
   background(40);
-  game.drawPongGame();      //Draw The game 
-  game.update();            //Update game 
+  game.drawPongGame();
+  game.update();
 }
 
 class Ball {
-  float positionX, positionY, size, speedX, speedY; 
+  float positionX, positionY, size, speedX, speedY;
 
   Ball(int sizeInput) {
     positionX = width/2;  //set position at Center
@@ -19,10 +18,12 @@ class Ball {
     size = sizeInput;     //set size
     speedX = -2;          //set  speed
     speedY = -3;
-  }    
+  }
+
   void drawBall() {
-    ellipse(positionX, positionY, size, size);  //draw Ball
-  }               //Draw the ball 
+    ellipse(positionX, positionY, size, size);
+  }
+
   void move() {
     positionX += speedX;  //update position from speed
     positionY += speedY;
@@ -32,19 +33,20 @@ class Ball {
     if (positionX < 0  || positionX > width) { //bounce on Top
       speedX *= -1;    //invert speed
     }
-  }                   //Move the ball 
+  }
+
   float getPositionX() {
     return 0.0;
-  }          //Get positionX of ball 
+  }          //Get positionX of ball
   float getPositionY() {
     return 0.0;
   }          //Get positionY of ball
   void setPositionX(int x) {
-  }      //Set positionX of ball 
+  }      //Set positionX of ball
   void setPositionY(int y) {
   }      //Set positionY of ball
   void setSpeedX(float factor) {
-  }  //Multiply Speed of ball by input 
+  }  //Multiply Speed of ball by input
   void defaultSet() {
   }              //Set Ball to Start point
 }
@@ -55,19 +57,25 @@ class Paddle {
   Ball objectBall;  //collect object from Class Ball
 
   Paddle(Ball bounceBall, int x, int y) {
-  }  //collect Ball object that want to
+    objectBall = bounceBall;   //collected ball class
+    positionX=x;  //set position
+    positionY=y;
+    score = 0;    //start score for each player
+  }
   void bounce() {
   }                 //Make target Ball bounce
   void drawPaddle() {
-  }             //Draw Paddle 
+    rect(positionX, positionY, 50, 200);  //draw a Paddle
+  }
   int getPositionY() {
     return 0;
-  }            //Get positionY of paddle 
+  }            //Get positionY of paddle
   void addPositionY(int adder) {
-  }  //Add value to position to move paddle 
+    positionY += adder ;     //add to move position
+  }
   int getScore() {
     return 0;
-  }                //Get score from player 
+  }                //Get score from player
   void addScore() {
   }               //Add 1 score to player
 }
@@ -79,14 +87,28 @@ class PongGame {
   int pastMouse;   //Variable of the values of past mouse
 
   PongGame() {
-    pongBall = new Ball(70);  //
+    pongBall = new Ball(70);  //Instance Ball that size 70
+    player1 = new Paddle(pongBall, 0, 0);           //instance player 1
+    player2 = new Paddle(pongBall, width-50, 0);    //instance player 2
+    pastMouse = 0;
   }
   void drawPongGame() {
-     pongBall.drawBall(); //Draw the Ball
-  }      
+    pongBall.drawBall();      //Draw PongBall
+    player1.drawPaddle();                           //draw player1 Paddle
+    player2.drawPaddle();                           //draw player2 Paddle
+  }
   void update() {
-    pongBall.move();   //Move the ball 
-  }              
+    pongBall.move();         //Move the Ball
+    if( mousePressed) {                         //if mouse press
+      if (mouseX < width/2) {                   //and player 1 zone move player'1Paddle
+      player1.addPositionY(mouseY-pastMouse);
+      }
+      else{
+       player2.addPositionY(mouseY-pastMouse);  //if player 2 zone move player'2 Paddle
+      }
+    }
+    pastMouse = mouseY;      //collect position of mouse
+  }
   void serveBall(int factor) {
   } //Put factor or side to serve the ball
 }
