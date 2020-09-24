@@ -73,9 +73,8 @@ class Paddle {
   }
 
   void bounce() {
-    if ( positionX+50 > objectBall.getPositionX()  && positionY < objectBall.getPositionY() && positionY+200 > objectBall.getPositionY() && positionX < objectBall.getPositionX() ) {
+    if ( circleRect(objectBall.getPositionX(), objectBall.getPositionY(), 35, positionX, positionY, 50, 200) ) {
       objectBall.setSpeedX(-1.5);
-      println("Active");
     }
   }
 
@@ -105,12 +104,14 @@ class PongGame {
   Paddle player2;
   Ball pongBall;   //Set pongBall as object of Ball
   int pastMouse;   //Variable of the values of past mouse
+  int time = 0;  //use to count delay time 
 
   PongGame() {
     pongBall = new Ball(70);  //Instance Ball that size 70
     player1 = new Paddle(pongBall, 0, 0);           //instance player 1
     player2 = new Paddle(pongBall, width-50, 0);    //instance player 2
     pastMouse = 0;
+    
   }
 
   void drawPongGame() {
@@ -124,7 +125,12 @@ class PongGame {
   }
 
   void update() {
+    if(time==0){
     pongBall.move();         //Move the Ball
+    }
+    else{
+      time -=1;
+    }
     if ( mousePressed) {                         //if mouse press
       if (mouseX < width/2) {                   //and player 1 zone move player'1Paddle
         player1.addPositionY(mouseY-pastMouse);
@@ -159,5 +165,30 @@ class PongGame {
     pongBall.setPositionY(height/2);
     pongBall.defaultSet();                  //set to default speed
     pongBall.setSpeedX(factor);           //set direction to factor
+    time = 60;
   }
+}
+
+boolean circleRect(float cx, float cy, float radius, float rx, float ry, float rw, float rh) {
+
+  // temporary variables to set edges for testing
+  float testX = cx;
+  float testY = cy;
+
+  // which edge is closest?
+  if (cx < rx)         testX = rx;      // test left edge
+  else if (cx > rx+rw) testX = rx+rw;   // right edge
+  if (cy < ry)         testY = ry;      // top edge
+  else if (cy > ry+rh) testY = ry+rh;   // bottom edge
+
+  // get distance from closest edges
+  float distX = cx-testX;
+  float distY = cy-testY;
+  float distance = sqrt( (distX*distX) + (distY*distY) );
+
+  // if the distance is less than the radius, collision!
+  if (distance <= radius) {
+    return true;
+  }
+  return false;
 }
