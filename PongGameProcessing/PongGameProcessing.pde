@@ -63,6 +63,7 @@ class Ball {
 
 class Paddle {
   int positionY, positionX, score;  //collect position and player score
+  boolean bounced;
   Ball objectBall;  //collect object from Class Ball
 
   Paddle(Ball bounceBall, int x, int y) {
@@ -70,11 +71,16 @@ class Paddle {
     positionX=x;  //set position
     positionY=y;
     score = 0;    //start score for each player
+    bounced = false;
   }
 
   void bounce() {
-    if ( circleRect(objectBall.getPositionX(), objectBall.getPositionY(), 35, positionX, positionY, 50, 200) ) {
+    if ( circleRect(objectBall.getPositionX(), objectBall.getPositionY(), 35, positionX, positionY, 50, 200) && !bounced ) {
       objectBall.setSpeedX(-1.5);
+      bounced = true;
+    }
+    if (!circleRect(objectBall.getPositionX(), objectBall.getPositionY(), 35, positionX, positionY, 50, 200)){
+      bounced = false;
     }
   }
 
@@ -104,14 +110,14 @@ class PongGame {
   Paddle player2;
   Ball pongBall;   //Set pongBall as object of Ball
   int pastMouse;   //Variable of the values of past mouse
-  int time = 0;  //use to count delay time 
+  int time = 0;  //use to count delay time
 
   PongGame() {
     pongBall = new Ball(70);  //Instance Ball that size 70
     player1 = new Paddle(pongBall, 0, 0);           //instance player 1
     player2 = new Paddle(pongBall, width-50, 0);    //instance player 2
     pastMouse = 0;
-    
+
   }
 
   void drawPongGame() {
@@ -155,6 +161,18 @@ class PongGame {
     {
       player1.addScore();    //add score to player1
       serveBall(-1);          //serve to right side
+    }
+    if(player1.getScore() >= 5){
+        rect(width/4,height/3,400,200);
+        fill(30);
+        text("Player 2 Wins!",width/4+20,height/3+120);
+        noLoop();
+    }
+    else if (player2.getScore() >= 5){
+        rect(width/4,height/3,400,200);
+        fill(30);
+        text("Player 2 Wins!",width/4+20,height/3+120);
+        noLoop();
     }
 
     pastMouse = mouseY;      //collect position of mouse
