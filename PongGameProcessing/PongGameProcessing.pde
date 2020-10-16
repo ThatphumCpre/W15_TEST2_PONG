@@ -30,6 +30,11 @@ class Ball {
     if (positionY < 0  || positionY > height) { //bounce on Top
       speedY *= -1;    //invert speed
     }
+    
+    if (positionX < 10){
+      speedX *= -1;
+    }
+   
   }
 
   float getPositionX() {
@@ -114,7 +119,7 @@ class PongGame {
 
   PongGame() {
     pongBall = new Ball(70);  //Instance Ball that size 70
-    player1 = new Paddle(pongBall, 0, 0);           //instance player 1
+    //player1 = new Paddle(pongBall, 0, 0);           //instance player 1
     player2 = new Paddle(pongBall, width-50, 0);    //instance player 2
     pastMouse = 0;
 
@@ -122,11 +127,11 @@ class PongGame {
 
   void drawPongGame() {
     textSize(54);
-    text(player1.getScore(), width/4, height/8);    //draw player  1 score
+    //text(player1.getScore(), width/4, height/8);    //draw player  1 score
     text(player2.getScore(), width*3/4, height/8);  //draw player  2 score
     rect(width/2, 0, 10, height);                   //draw center line
     pongBall.drawBall();      //Draw PongBall
-    player1.drawPaddle();                           //draw player1 Paddle
+    //player1.drawPaddle();                           //draw player1 Paddle
     player2.drawPaddle();                           //draw player2 Paddle
   }
 
@@ -139,7 +144,7 @@ class PongGame {
     }
     if ( mousePressed) {                         //if mouse press
       if (mouseX < width/2) {                   //and player 1 zone move player'1Paddle
-        player1.addPositionY(mouseY-pastMouse);
+        //player1.addPositionY(mouseY-pastMouse);
       } else {
         player2.addPositionY(mouseY-pastMouse);  //if player 2 zone move player'2 Paddle
       }
@@ -149,7 +154,7 @@ class PongGame {
     if (pongBall.getPositionX() > width/2) { //if in player2 side
       player2.bounce();        //bounce player2 Paddle when ball on player2 side
     } else {
-      player1.bounce();        //bounce player1 Paddle when ball on player2 side
+      //player1.bounce();        //bounce player1 Paddle when ball on player2 side
     }
 
 
@@ -159,15 +164,15 @@ class PongGame {
     }
     else if  (pongBall.getPositionX() > width)
     {
-      player1.addScore();    //add score to player1
+      //player1.addScore();    //add score to player1
       serveBall(-1);          //serve to right side
     }
-    if(player1.getScore() >= 5){
+    /* if(player1.getScore() >= 5){
         rect(width/4,height/3,400,200);
         fill(30);
         text("Player 2 Wins!",width/4+20,height/3+120);
         noLoop();
-    }
+    } */
     else if (player2.getScore() >= 5){
         rect(width/4,height/3,400,200);
         fill(30);
